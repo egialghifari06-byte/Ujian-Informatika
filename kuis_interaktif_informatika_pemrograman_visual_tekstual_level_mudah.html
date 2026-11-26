@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Game Show Informatika Kelas IX - Pemrograman Mudah</title>
+    <style>
+        :root {
+            --bg-primary: #1a0b2e;
+            --bg-secondary: #2b124c;
+            --accent-yellow: #facc15;
+            --accent-cyan: #22d3ee;
+            --accent-green: #22c55e;
+            --accent-red: #ef4444;
+            --accent-purple: #818cf8;
+            --text-light: #ffffff;
+            --text-dim: #c084fc;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background: radial-gradient(circle at center, #3b1578 0%, #1a0b2e 100%);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow-x: hidden;
+            padding: 15px;
+        }
+
+        /* Header & Stats */
+        header {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto 15px auto;
+            background: rgba(43, 18, 76, 0.85);
+            border: 2px solid var(--accent-purple);
+            border-radius: 16px;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            backdrop-filter: blur(8px);
+        }
+
+        .logo-title h1 {
+            font-size: 1.2rem;
+            color: var(--accent-yellow);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .logo-title span {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        .stats-container {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .stat-box {
+            text-align: center;
+            background: rgba(15, 5, 29, 0.6);
+            padding: 6px 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .stat-label {
+            font-size: 0.65rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            display: block;
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--accent-cyan);
+        }
+
+        .lives-display {
+            color: var(--accent-red);
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+        }
+
+        /* Main Game Layout */
+        main {
+            width: 100%;
+            max-width: 900px;
+            margin: auto;
+            position: relative;
+        }
+
+        /* Card Container */
+        .game-card {
+            background: rgba(43, 18, 76, 0.9);
+            border: 3px solid var(--accent-purple);
+            border-radius: 24px;
+            padding: 25px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.5), inset 0 0 15px rgba(129, 140, 248, 0.2);
+            text-align: center;
+            animation: slideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Start Screen */
+        .start-screen h2 {
+            font-size: 2rem;
+            color: var(--accent-yellow);
+            margin-bottom: 10px;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        .start-screen p {
+            color: #d8b4fe;
+            margin-bottom: 20px;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .rules-box {
+            background: rgba(15, 5, 29, 0.7);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 25px;
+            text-align: left;
+            border-left: 4px solid var(--accent-yellow);
+        }
+
+        .rules-box h4 {
+            color: var(--accent-yellow);
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .rules-box ul {
+            list-style-type: none;
+            font-size: 0.85rem;
+            color: #e9d5ff;
+        }
+
+        .rules-box li {
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Buttons */
+        .btn-main {
+            background: linear-gradient(180deg, #22c55e 0%, #15803d 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #166534, 0 10px 20px rgba(0,0,0,0.4);
+            transition: all 0.1s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-main:hover {
+            background: linear-gradient(180deg, #4ade80 0%, #16a34a 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 0 #166534, 0 12px 22px rgba(0,0,0,0.4);
+        }
+
+        .btn-main:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #166534, 0 4px 10px rgba(0,0,0,0.4);
+        }
+
+        /* Timer Bar */
+        .timer-container {
+            width: 100%;
+            height: 14px;
+            background: rgba(15, 5, 29, 0.8);
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+        }
+
+        .timer-bar {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-yellow));
+            border-radius: 10px;
+            transition: width 1s linear, background-color 0.3s ease;
+        }
+
+        .timer-bar.warning {
+            background: linear-gradient(90deg, #f97316, var(--accent-red));
+            animation: pulseTimer 0.5s infinite alternate;
+        }
+
+        @keyframes pulseTimer {
+            from { opacity: 1; }
+            to { opacity: 0.6; }
+        }
+
+        /* Lifelines / Bantuan */
+        .lifelines-container {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .btn-lifeline {
+            background: rgba(15, 5, 29, 0.7);
+            border: 1px solid var(--accent-purple);
+            color: var(--accent-yellow);
+            padding: 8px 14px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-lifeline:hover:not(:disabled) {
+            background: var(--accent-purple);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .btn-lifeline:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            border-color: gray;
+            color: gray;
+        }
+
+        /* Question Box */
+        .question-number {
+            font-size: 0.85rem;
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+            font-weight: bold;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 25px;
+            line-height: 1.4;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Options Grid */
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 640px) {
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .btn-option {
+            background: linear-gradient(180deg, #3b1578 0%, #240a50 100%);
+            border: 2px solid rgba(129, 140, 248, 0.4);
+            color: white;
+            padding: 16px 20px;
+            border-radius: 16px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.3);
+            transition: all 0.15s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-option:hover:not(:disabled) {
+            border-color: var(--accent-yellow);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 rgba(0,0,0,0.3);
+            background: linear-gradient(180deg, #4c1d95 0%, #2e1065 100%);
+        }
+
+        .btn-option:active:not(:disabled) {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 rgba(0,0,0,0.3);
+        }
+
+        .opt-label {
+            background: rgba(255,255,255,0.1);
+            color: var(--accent-yellow);
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .btn-option.correct {
+            background: linear-gradient(180deg, #22c55e 0%, #15803d 100%) !important;
+            border-color: #86efac !important;
+            color: white !important;
+            animation: bounce 0.4s ease;
+        }
+
+        .btn-option.wrong {
+            background: linear-gradient(180deg, #ef4444 0%, #b91c1c 100%) !important;
+            border-color: #fca5a5 !important;
+            color: white !important;
+            animation: shake 0.4s ease;
+        }
+
+        .btn-option.hidden-option {
+            visibility: hidden;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+
+        /* Discussion / Explanation Box */
+        .explanation-box {
+            background: rgba(15, 5, 29, 0.9);
+            border: 2px solid var(--accent-cyan);
+            border-radius: 14px;
+            padding: 15px;
+            margin-top: 15px;
+            text-align: left;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .explanation-title {
+            font-size: 0.85rem;
+            color: var(--accent-cyan);
+            font-weight: bold;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .explanation-text {
+            font-size: 0.9rem;
+            color: #e9d5ff;
+            line-height: 1.4;
+        }
+
+        .btn-next {
+            margin-top: 15px;
+            background: var(--accent-yellow);
+            color: #1a0b2e;
+            border: none;
+            padding: 12px 30px;
+            font-weight: bold;
+            font-size: 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #b45309;
+            transition: all 0.15s ease;
+        }
+
+        .btn-next:hover {
+            background: #fde047;
+            transform: translateY(-2px);
+        }
+
+        /* Result Screen */
+        .result-screen h2 {
+            font-size: 2.2rem;
+            color: var(--accent-yellow);
+            margin-bottom: 10px;
+        }
+
+        .result-badge {
+            font-size: 4rem;
+            margin: 10px 0;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .summary-card {
+            background: rgba(15, 5, 29, 0.7);
+            border-radius: 12px;
+            padding: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .summary-val {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--accent-cyan);
+        }
+
+        .summary-lbl {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+        }
+
+        /* Canvas Particle Effects */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 99;
+        }
+
+        /* Utility */
+        .hidden { display: none !important; }
+
+        footer {
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Top Header -->
+    <header>
+        <div class="logo-title">
+            <span>Informatika SMP IX</span>
+            <h1>Pemrograman Game Show</h1>
+        </div>
+        <div class="stats-container">
+            <div class="stat-box">
+                <span class="stat-label">Nyawa</span>
+                <span id="lives-display" class="lives-display">❤️❤️❤️</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-label">Skor</span>
+                <span id="score-display" class="stat-value">0</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Game Area -->
+    <main>
+        
+        <!-- 1. START SCREEN -->
+        <div id="start-screen" class="game-card start-screen">
+            <div style="font-size: 3.5rem; margin-bottom: 10px;">🎮</div>
+            <h2>Kuis Interaktif Informatika</h2>
+            <p>Uji pengetahuan dasarmu tentang <strong>Pemrograman Visual (Scratch)</strong> & <strong>Pemrograman Tekstual (Python)</strong>!</p>
+            
+            <div class="rules-box">
+                <h4>🎯 Aturan Permainan:</h4>
+                <ul>
+                    <li>⏱️ Waktu <strong>30 detik</strong> per soal. Jawab lebih cepat untuk skor bonus!</li>
+                    <li>❤️ Kamu memiliki <strong>3 Nyawa</strong>. Jawaban salah/waktu habis akan mengurangi nyawa.</li>
+                    <li>💡 Gunakan 3 Bantuan (Lifelines) jika mengalami kesulitan.</li>
+                    <li>⭐ 10 Soal pilihan ganda tingkat dasar/mudah.</li>
+                </ul>
+            </div>
+
+            <button onclick="startGame()" class="btn-main">Mulai Kuis 🚀</button>
+        </div>
+
+        <!-- 2. QUIZ SCREEN -->
+        <div id="quiz-screen" class="game-card hidden">
+            
+            <!-- Timer Bar -->
+            <div class="timer-container">
+                <div id="timer-bar" class="timer-bar"></div>
+            </div>
+
+            <!-- Lifelines -->
+            <div class="lifelines-container">
+                <button id="life-5050" onclick="useLifeline5050()" class="btn-lifeline">
+                    <span>✂️</span> 50:50
+                </button>
+                <button id="life-time" onclick="useLifelineTime()" class="btn-lifeline">
+                    <span>⏳</span> +15 Detik
+                </button>
+                <button id="life-skip" onclick="useLifelineSkip()" class="btn-lifeline">
+                    <span>⏭️</span> Skip Soal
+                </button>
+            </div>
+
+            <!-- Question Box -->
+            <div class="question-number">
+                Soal <span id="q-current">1</span> dari <span id="q-total">10</span>
+            </div>
+            <div id="question-text" class="question-text">
+                Memuat pertanyaan...
+            </div>
+
+            <!-- Options Grid -->
+            <div id="options-grid" class="options-grid">
+                <!-- Direct Injected JS -->
+            </div>
+
+            <!-- Explanation Box (Shows after answering) -->
+            <div id="explanation-box" class="explanation-box hidden">
+                <div class="explanation-title">
+                    <span>💡 Pembahasan Ringkas:</span>
+                </div>
+                <div id="explanation-text" class="explanation-text">
+                    Penjelasan akan tampil di sini.
+                </div>
+                <button onclick="nextQuestion()" class="btn-next">Lanjut ke Soal Berikutnya ➔</button>
+            </div>
+
+        </div>
+
+        <!-- 3. RESULT SCREEN -->
+        <div id="result-screen" class="game-card result-screen hidden">
+            <div id="result-badge" class="result-badge">🏆</div>
+            <h2 id="result-title">Kuis Selesai!</h2>
+            <p id="result-subtitle" style="color: #d8b4fe;">Kerja bagus! Berikut adalah hasil kuismu:</p>
+
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div id="final-score" class="summary-val">0</div>
+                    <div class="summary-lbl">Total Skor</div>
+                </div>
+                <div class="summary-card">
+                    <div id="final-accuracy" class="summary-val">0%</div>
+                    <div class="summary-lbl">Akurasi</div>
+                </div>
+                <div class="summary-card">
+                    <div id="final-time" class="summary-val">0s</div>
+                    <div class="summary-lbl">Total Waktu</div>
+                </div>
+            </div>
+
+            <button onclick="startGame()" class="btn-main">🔄 Main Lagi</button>
+        </div>
+
+    </main>
+
+    <footer>
+        Kuis Interaktif Informatika Kelas IX • 100% Offline Single File Game
+    </footer>
+
+    <script>
+        /* =========================================================
+           1. DATA SOAL (Tingkat MUDAH / Dasar Kelas 9)
+           ========================================================= */
+        const quizQuestions = [
+            {
+                question: "Apa itu Scratch?",
+                options: [
+                    "Aplikasi pemrograman berbasis blok atau puzzle",
+                    "Aplikasi untuk mengedit video dan lagu",
+                    "Sistem operasi untuk komputer kasir",
+                    "Bahasa pemrograman untuk membuat kabel LAN"
+                ],
+                answer: 0,
+                explanation: "Scratch adalah platform pemrograman visual berbasis blok (puzzle) yang dirancang agar pemula mudah belajar logika pemrograman tanpa perlu mengetik sintaks."
+            },
+            {
+                question: "Warna/jenis blok yang digunakan untuk menggerakkan karakter/sprite di Scratch adalah...",
+                options: [
+                    "Sensing (Warna Biru Muda)",
+                    "Motion / Gerak (Warna Biru Tua)",
+                    "Sound (Warna Ungu)",
+                    "Variables (Warna Oranye)"
+                ],
+                answer: 1,
+                explanation: "Blok kelompok 'Motion' (Biru Tua) berisi perintah untuk mengatur pergerakan objek, seperti bergerak maju, berputar, atau berpindah posisi."
+            },
+            {
+                question: "Istilah untuk karakter atau objek dalam Scratch yang bisa diberi perintah dinamakan...",
+                options: [
+                    "Sprite",
+                    "Script",
+                    "Stage",
+                    "Costume"
+                ],
+                answer: 0,
+                explanation: "Objek gambar atau karakter interaktif di Scratch disebut sebagai 'Sprite'."
+            },
+            {
+                question: "Karakter hewan default (bawaan) yang pertama kali muncul saat membuka Scratch adalah...",
+                options: [
+                    "Kelinci",
+                    "Kucing (Scratch Cat)",
+                    "Burung Hantu",
+                    "Anjing"
+                ],
+                answer: 1,
+                explanation: "Maskot dan sprite utama bawaan dari Scratch adalah Seekor Kucing Oranye (Scratch Cat)."
+            },
+            {
+                question: "Untuk menjalankan susunan blok perintah di Scratch, tombol yang digunakan berlogo...",
+                options: [
+                    "Bintang Kuning",
+                    "Bendera Hijau (Green Flag)",
+                    "Lingkaran Merah",
+                    "Tanda Panah Biru"
+                ],
+                answer: 1,
+                explanation: "Tombol Bendera Hijau (Green Flag) digunakan sebagai pemicu utama (Event) untuk memulai/menjalankan program Scratch."
+            },
+            {
+                question: "Manakah di bawah ini yang merupakan contoh bahasa pemrograman berbasis TEKSTUAL (mengetik kode tulisan)?",
+                options: [
+                    "Python",
+                    "Scratch",
+                    "Blockly",
+                    "Google Maps"
+                ],
+                answer: 0,
+                explanation: "Python adalah bahasa pemrograman tekstual terpopuler di mana kode dituliskan menggunakan teks sintaksik."
+            },
+            {
+                question: "Perbedaan utama antara pemrograman blok dan pemrograman tekstual adalah...",
+                options: [
+                    "Pemrograman blok mengetik teks, tekstual menyusun puzzle",
+                    "Pemrograman blok menyusun puzzle grafis, tekstual mengetik kode tulisan",
+                    "Pemrograman tekstual hanya bisa digunakan di HP",
+                    "Pemrograman blok tidak menggunakan logika sama sekali"
+                ],
+                answer: 1,
+                explanation: "Pemrograman blok berfokus pada menyusun blok grafis tanpa takut salah ketik, sedangkan tekstual mengharuskan mengetik teks sesuai aturan sintaks."
+            },
+            {
+                question: "Blok 'repeat' atau 'forever' dalam Scratch digunakan untuk fungsi...",
+                options: [
+                    "Pengulangan (Looping)",
+                    "Menghapus karakter",
+                    "Mencetak gambar ke kertas",
+                    "Menghentikan program secara mendadak"
+                ],
+                answer: 0,
+                explanation: "Blok 'repeat' (ulangi sekian kali) dan 'forever' (ulangi selamanya) berguna untuk melakukan instruksi berulang kali (looping)."
+            },
+            {
+                question: "Perintah print('Hello') dalam bahasa pemrograman Python berfungsi untuk...",
+                options: [
+                    "Menyimpan file ke flashdisk",
+                    "Menampilkan teks 'Hello' ke layar monitor",
+                    "Mengirim pesan email otomatis",
+                    "Mematikan komputer"
+                ],
+                answer: 1,
+                explanation: "Fungsi print() pada Python berguna untuk mencetak/menampilkan keluaran (output) berupa teks atau data ke layar."
+            },
+            {
+                question: "Latar belakang atau panggung tempat sprite bergerak pada Scratch disebut...",
+                options: [
+                    "Backdrop / Stage",
+                    "Wallpaper",
+                    "Soundtrack",
+                    "Canvas"
+                ],
+                answer: 0,
+                explanation: "Area latar belakang visual tempat sprite beraksi dan tampil di Scratch dinamakan Backdrop atau Stage."
+            }
+        ];
+
+        /* =========================================================
+           2. WEB AUDIO API SYNTHESIZER (100% Offline Audio)
+           ========================================================= */
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playSound(type) {
+            if (!audioCtx) return;
+            
+            const now = audioCtx.currentTime;
+
+            if (type === 'click') {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(800, now + 0.05);
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + 0.05);
+            } 
+            else if (type === 'correct') {
+                // Happy arpeggio
+                const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+                notes.forEach((freq, idx) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, now + (idx * 0.08));
+                    gain.gain.setValueAtTime(0.3, now + (idx * 0.08));
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + (idx * 0.08) + 0.2);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now + (idx * 0.08));
+                    osc.stop(now + (idx * 0.08) + 0.25);
+                });
+            } 
+            else if (type === 'wrong') {
+                // Sad buzzer
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(180, now);
+                osc.frequency.linearRampToValueAtTime(110, now + 0.3);
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + 0.3);
+            }
+            else if (type === 'lifeline') {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.linearRampToValueAtTime(600, now + 0.15);
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + 0.15);
+            }
+            else if (type === 'victory') {
+                const notes = [440, 554.37, 659.25, 880];
+                notes.forEach((freq, i) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(freq, now + (i * 0.12));
+                    gain.gain.setValueAtTime(0.2, now + (i * 0.12));
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + (i * 0.12) + 0.3);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now + (i * 0.12));
+                    osc.stop(now + (i * 0.12) + 0.35);
+                });
+            }
+        }
+
+        /* =========================================================
+           3. GAME STATE & LOGIC
+           ========================================================= */
+        let currentQIndex = 0;
+        let score = 0;
+        let lives = 3;
+        let timer = null;
+        let timeLeft = 30;
+        const maxTime = 30;
+        let totalTimeSpent = 0;
+        let correctCount = 0;
+
+        // Lifelines state
+        let used5050 = false;
+        let usedTime = false;
+        let usedSkip = false;
+
+        // DOM Elements
+        const startScreen = document.getElementById('start-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const questionText = document.getElementById('question-text');
+        const optionsGrid = document.getElementById('options-grid');
+        const qCurrent = document.getElementById('q-current');
+        const qTotal = document.getElementById('q-total');
+        const scoreDisplay = document.getElementById('score-display');
+        const livesDisplay = document.getElementById('lives-display');
+        const timerBar = document.getElementById('timer-bar');
+        const explanationBox = document.getElementById('explanation-box');
+        const explanationText = document.getElementById('explanation-text');
+
+        function startGame() {
+            initAudio();
+            playSound('click');
+
+            currentQIndex = 0;
+            score = 0;
+            lives = 3;
+            correctCount = 0;
+            totalTimeSpent = 0;
+
+            used5050 = false;
+            usedTime = false;
+            usedSkip = false;
+
+            document.getElementById('life-5050').disabled = false;
+            document.getElementById('life-time').disabled = false;
+            document.getElementById('life-skip').disabled = false;
+
+            updateStatsUI();
+
+            startScreen.classList.add('hidden');
+            resultScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+
+            qTotal.textContent = quizQuestions.length;
+
+            loadQuestion();
+        }
+
+        function updateStatsUI() {
+            scoreDisplay.textContent = score;
+            let heartStr = '';
+            for (let i = 0; i < lives; i++) heartStr += '❤️';
+            livesDisplay.textContent = heartStr || '💀';
+        }
+
+        function loadQuestion() {
+            clearInterval(timer);
+            timeLeft = maxTime;
+            updateTimerBar();
+
+            explanationBox.classList.add('hidden');
+
+            const q = quizQuestions[currentQIndex];
+            qCurrent.textContent = currentQIndex + 1;
+            questionText.textContent = q.question;
+
+            optionsGrid.innerHTML = '';
+            const labels = ['A', 'B', 'C', 'D'];
+
+            q.options.forEach((optText, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-option';
+                btn.onclick = () => handleAnswer(i);
+                btn.innerHTML = `
+                    <span class="opt-label">${labels[i]}</span>
+                    <span>${optText}</span>
+                `;
+                optionsGrid.appendChild(btn);
+            });
+
+            startTimer();
+        }
+
+        function startTimer() {
+            timer = setInterval(() => {
+                timeLeft--;
+                totalTimeSpent++;
+                updateTimerBar();
+
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    handleTimeout();
+                }
+            }, 1000);
+        }
+
+        function updateTimerBar() {
+            const pct = (timeLeft / maxTime) * 100;
+            timerBar.style.width = `${pct}%`;
+
+            if (timeLeft <= 7) {
+                timerBar.classList.add('warning');
+            } else {
+                timerBar.classList.remove('warning');
+            }
+        }
+
+        function handleAnswer(selectedIndex) {
+            clearInterval(timer);
+            const q = quizQuestions[currentQIndex];
+            const buttons = optionsGrid.children;
+
+            // Disable all buttons
+            for (let btn of buttons) {
+                btn.disabled = true;
+            }
+
+            if (selectedIndex === q.answer) {
+                // Benar
+                playSound('correct');
+                buttons[selectedIndex].classList.add('correct');
+                
+                // Tambah skor (Base 100 + Sisa waktu x 10)
+                const bonus = timeLeft * 10;
+                score += (100 + bonus);
+                correctCount++;
+                updateStatsUI();
+
+                // Sparkles / Confetti
+                triggerConfetti();
+
+            } else {
+                // Salah
+                playSound('wrong');
+                buttons[selectedIndex].classList.add('wrong');
+                buttons[q.answer].classList.add('correct'); // Tunjukkan yang benar
+
+                lives--;
+                updateStatsUI();
+            }
+
+            // Tampilkan pembahasan
+            explanationText.textContent = q.explanation;
+            explanationBox.classList.remove('hidden');
+        }
+
+        function handleTimeout() {
+            playSound('wrong');
+            const q = quizQuestions[currentQIndex];
+            const buttons = optionsGrid.children;
+
+            for (let btn of buttons) {
+                btn.disabled = true;
+            }
+
+            buttons[q.answer].classList.add('correct');
+
+            lives--;
+            updateStatsUI();
+
+            explanationText.textContent = "⏱️ Waktu habis! " + q.explanation;
+            explanationBox.classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            playSound('click');
+
+            if (lives <= 0 || currentQIndex >= quizQuestions.length - 1) {
+                endGame();
+            } else {
+                currentQIndex++;
+                loadQuestion();
+            }
+        }
+
+        /* =========================================================
+           4. LIFELINES / BANTUAN
+           ========================================================= */
+        function useLifeline5050() {
+            if (used5050) return;
+            playSound('lifeline');
+            used5050 = true;
+            document.getElementById('life-5050').disabled = true;
+
+            const q = quizQuestions[currentQIndex];
+            const buttons = optionsGrid.children;
+            let hiddenCount = 0;
+
+            for (let i = 0; i < buttons.length; i++) {
+                if (i !== q.answer && hiddenCount < 2) {
+                    buttons[i].classList.add('hidden-option');
+                    hiddenCount++;
+                }
+            }
+        }
+
+        function useLifelineTime() {
+            if (usedTime) return;
+            playSound('lifeline');
+            usedTime = true;
+            document.getElementById('life-time').disabled = true;
+
+            timeLeft = Math.min(maxTime, timeLeft + 15);
+            updateTimerBar();
+        }
+
+        function useLifelineSkip() {
+            if (usedSkip) return;
+            playSound('lifeline');
+            usedSkip = true;
+            document.getElementById('life-skip').disabled = true;
+
+            clearInterval(timer);
+            currentQIndex++;
+
+            if (currentQIndex < quizQuestions.length) {
+                loadQuestion();
+            } else {
+                endGame();
+            }
+        }
+
+        /* =========================================================
+           5. GAME OVER / RESULT
+           ========================================================= */
+        function endGame() {
+            quizScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+
+            const accuracy = Math.round((correctCount / quizQuestions.length) * 100);
+
+            document.getElementById('final-score').textContent = score;
+            document.getElementById('final-accuracy').textContent = `${accuracy}%`;
+            document.getElementById('final-time').textContent = `${totalTimeSpent}s`;
+
+            const badge = document.getElementById('result-badge');
+            const title = document.getElementById('result-title');
+            const sub = document.getElementById('result-subtitle');
+
+            if (lives <= 0) {
+                playSound('wrong');
+                badge.textContent = '💀';
+                title.textContent = 'Game Over';
+                sub.textContent = 'Nyawamu habis! Tetap semangat dan coba lagi ya.';
+            } else if (accuracy >= 80) {
+                playSound('victory');
+                badge.textContent = '🏆';
+                title.textContent = 'Luar Biasa!';
+                sub.textContent = 'Kamu hebat! Semua konsep dasar pemrograman telah kamu kuasai!';
+                triggerConfetti(100);
+            } else {
+                playSound('victory');
+                badge.textContent = '⭐';
+                title.textContent = 'Hasil yang Bagus!';
+                sub.textContent = 'Kamu sudah memahami dasar-dasar Informatika dengan baik.';
+            }
+        }
+
+        /* =========================================================
+           6. VISUAL PARTICLE / CONFETTI EFFECT (Canvas Native)
+           ========================================================= */
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function triggerConfetti(count = 35) {
+            const colors = ['#facc15', '#22d3ee', '#22c55e', '#ef4444', '#a855f7'];
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x: canvas.width / 2,
+                    y: canvas.height / 2,
+                    vx: (Math.random() - 0.5) * 12,
+                    vy: (Math.random() - 0.7) * 12,
+                    size: Math.random() * 8 + 4,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    alpha: 1,
+                    decay: Math.random() * 0.02 + 0.015
+                });
+            }
+        }
+
+        function renderParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.2; // Gravity
+                p.alpha -= p.decay;
+
+                if (p.alpha <= 0) {
+                    particles.splice(i, 1);
+                    continue;
+                }
+
+                ctx.save();
+                ctx.globalAlpha = p.alpha;
+                ctx.fillStyle = p.color;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+
+            requestAnimationFrame(renderParticles);
+        }
+        renderParticles();
+
+    </script>
+</body>
+</html>
